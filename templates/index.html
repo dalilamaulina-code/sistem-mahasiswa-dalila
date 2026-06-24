@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Master Data Mahasiswa - Sistem Informasi Manajemen</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='sb-admin/css/styles.css') }}" rel="stylesheet" />
+    
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6f9;
+            color: #333e48;
+        }
+        .bg-navy {
+            background-color: #0f2c59 !important;
+        }
+        .text-navy {
+            color: #0f2c59 !important;
+        }
+        .sb-sidenav-dark {
+            background-color: #0f2c59;
+        }
+        .sb-sidenav-dark .sb-sidenav-menu .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 14px 24px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .sb-sidenav-dark .sb-sidenav-menu .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .sb-sidenav-dark .sb-sidenav-menu .nav-link.active {
+            color: #ffc107;
+            background-color: rgba(255, 255, 255, 0.1);
+            font-weight: 600;
+        }
+        .card-custom {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            background: #ffffff;
+            overflow: hidden;
+        }
+        .card-custom .card-header {
+            background: #ffffff;
+            border-bottom: 1px solid #edf2f7;
+            padding: 24px;
+        }
+        .table-modern {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table-modern thead th {
+            background-color: #f8fafc;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 16px 20px;
+            border-bottom: 2px solid #edf2f7;
+        }
+        .table-modern tbody td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #edf2f7;
+            color: #334155;
+            font-size: 0.9rem;
+        }
+        .table-modern tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        .table-modern tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        .badge-soft-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .badge-soft-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .badge-soft-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            font-weight: 600;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .form-control, .form-select {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.92rem;
+            transition: all 0.2s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #0f2c59;
+            box-shadow: 0 0 0 3px rgba(15, 44, 89, 0.1);
+        }
+        .input-group-text-custom {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            color: #94a3b8;
+        }
+        .input-group .form-control-custom {
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+        }
+        .btn-custom {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        .btn-action {
+            border-radius: 8px;
+            padding: 6px 10px;
+        }
+        .modal-content-custom {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .modal-header-custom {
+            border-bottom: 1px solid #edf2f7;
+            padding: 24px;
+        }
+        .input-readonly {
+            background-color: #e9ecef !important;
+            color: #6c757d !important;
+            cursor: not-allowed !important;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="sb-nav-fixed">
+    
+    <div id="flash-container" style="display: none;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-item" data-category="{{ category }}" data-message="{{ message | safe }}"></div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-navy shadow-sm px-3">
+        <a class="navbar-brand fw-bold tracking-wide text-warning" href="/dashboard">
+            <i class="fas fa-mortarboard me-2"></i>SIM MAHASISWA
+        </a>
+        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 text-white" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+        <ul class="navbar-nav ms-auto me-3">
+            <li class="nav-item">
+                <button class="nav-link px-3 border border-warning rounded-pill btn-sm text-warning fw-bold bg-transparent" id="btn-logout">
+                    <i class="fas fa-sign-out-alt me-1"></i> Log Out Admin
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark shadow-sm" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav pt-4">
+                        <div class="sb-sidenav-menu-heading text-uppercase text-white-50 px-4 small fw-bold tracking-wider">Panel Kontrol</div>
+                        <a class="nav-link" href="/dashboard">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-pie fs-5"></i></div>
+                            <span>Statistik & Ringkasan</span>
+                        </a>
+                        <a class="nav-link active" href="/dashboard/mahasiswa">
+                            <div class="sb-nav-link-icon"><i class="fas fa-user-friends fs-5"></i></div>
+                            <span>Kelola Data Mahasiswa</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer bg-navy border-top border-secondary text-white-50 py-3 px-4">
+                    <div class="small">Sesi Hak Akses:</div>
+                    <span class="text-white fw-bold"><i class="fas fa-user-shield text-warning me-1"></i> Administrator Sistem</span>
+                </div>
+            </nav>
+        </div>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid px-4 pt-4">
+                    
+                    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap row-gap-3">
+                        <div>
+                            <h2 class="fw-bold text-dark m-0 tracking-tight">Master Data Arsip Mahasiswa</h2>
+                            <p class="text-muted m-0 small">Halaman operasional modifikasi entitas, komparasi algoritma kompleksitas IPK, serta pemrosesan pencadangan eksternal (File I/O).</p>
+                        </div>
+                    </div>
+
+                    <div class="card card-custom mb-5">
+                        <div class="card-header d-flex justify-content-between align-items-center flex-wrap row-gap-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-light p-2 rounded-3 me-3 text-navy">
+                                    <i class="fas fa-database fs-5"></i>
+                                </div>
+                                <h5 class="m-0 fw-bold text-dark">Daftar Rekam Data Akademik</h5>
+                            </div>
+                            
+                            <div class="d-flex gap-2 flex-wrap">
+                                <div class="dropdown">
+                                    <button class="btn btn-outline-secondary btn-custom dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-sort-amount-down me-2"></i>Komparasi Algoritma IPK
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item py-2" href="/dashboard/mahasiswa?sort=bubble"><i class="fas fa-bolt me-2 text-warning"></i>Bubble Sort Manual</a></li>
+                                        <li><a class="dropdown-item py-2" href="/dashboard/mahasiswa?sort=selection"><i class="fas fa-bolt me-2 text-primary"></i>Selection Sort Manual</a></li>
+                                    </ul>
+                                </div>
+
+                                <a href="/dashboard/mahasiswa/backup" class="btn btn-outline-primary btn-custom">
+                                    <i class="fas fa-file-download me-2"></i>Pencadangan Data (File I/O)
+                                </a>
+
+                                <button type="button" class="btn btn-primary btn-custom bg-navy" data-bs-toggle="modal" data-bs-target="#modalTambahData">
+                                    <i class="fas fa-plus-circle me-2"></i>Registrasi Mahasiswa Baru
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body p-0">
+                            <div class="p-4 bg-light border-bottom border-light">
+                                <form action="/dashboard/mahasiswa" method="GET" class="row g-2 m-0" autocomplete="off">
+                                    <div class="col-md-12 p-0">
+                                        <div class="input-group">
+                                            <span class="input-group-text input-group-text-custom"><i class="fas fa-search"></i></span>
+                                            <input type="text" name="search" class="form-control form-control-custom" placeholder="Jalankan Linear Search berdasarkan kriteria NIM atau Nama Mahasiswa..." value="{{ search_query or '' }}">
+                                            <button type="submit" class="btn btn-primary btn-custom px-4 bg-navy">Eksekusi Cari</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-modern align-middle w-100 m-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 60px" class="text-center">No</th>
+                                            <th style="width: 140px">NIM</th>
+                                            <th>Nama Lengkap</th>
+                                            <th>Program Studi</th>
+                                            <th class="text-center" style="width: 110px">Semester</th>
+                                            <th class="text-center" style="width: 100px">IPK</th>
+                                            <th>Informasi Kontak</th>
+                                            <th class="text-center" style="width: 130px">Status Registrasi</th>
+                                            <th class="text-center" style="width: 130px">Tindakan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if mahasiswas %}
+                                            {% for mhs in mahasiswas %}
+                                            <tr>
+                                                <td class="text-center text-muted fw-medium">{{ loop.index }}</td>
+                                                <td class="fw-bold text-secondary">{{ mhs.nim }}</td>
+                                                <td>
+                                                    <div class="fw-semibold text-dark">{{ mhs.get_nama() }}</div>
+                                                </td> 
+                                                <td><span class="text-secondary fw-medium">{{ mhs.jurusan }}</span></td>
+                                                <td class="text-center fw-medium">{{ mhs.semester }}</td>
+                                                <td class="text-center">
+                                                    <span class="badge bg-light text-primary border border-primary-subtle fw-bold px-2 py-1.5 fs-6" style="border-radius: 6px;">
+                                                        {{ mhs.ipk }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div class="small text-dark fw-medium"><i class="fas fa-envelope me-1 text-muted"></i> {{ mhs.email }}</div>
+                                                    <div class="small text-muted mt-0.5"><i class="fas fa-phone me-1 text-muted"></i> {{ mhs.no_hp }}</div>
+                                                </td>
+                                                <td class="text-center">
+                                                    {% if mhs.status.lower() == 'aktif' %}
+                                                        <span class="badge-soft-success">Aktif</span>
+                                                    {% elif mhs.status.lower() == 'cuti' %}
+                                                        <span class="badge-soft-warning">Cuti</span>
+                                                    {% else %}
+                                                        <span class="badge-soft-danger">Non-Aktif</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-outline-warning btn-sm btn-action me-1" data-bs-toggle="modal" data-bs-target="#modalEditData{{ mhs.nim }}" title="Ubah Parameter">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger btn-sm btn-action" title="Hapus Entitas" onclick="hapusKonfirmasi('{{ mhs.nim }}', '{{ mhs.get_nama() }}')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td colspan="9" class="text-center text-muted py-5">
+                                                    <i class="fas fa-folder-open d-block fs-2 text-muted mb-3"></i>
+                                                    Rekam data kosong atau kriteria entitas tidak ditemukan dalam sistem.
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTambahData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalTambahLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content modal-content-custom">
+                <div class="modal-header modal-header-custom bg-light">
+                    <h5 class="modal-title fw-bold text-dark" id="modalTambahLabel"><i class="fas fa-user-plus me-2 text-primary"></i>Formulir Registrasi Mahasiswa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/dashboard/mahasiswa/tambah" method="POST" autocomplete="off">
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary small">NIM (Nomor Induk Mahasiswa)</label>
+                                <input type="text" name="nim" class="form-control" placeholder="Masukkan NIM" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary fw-semibold small">Nama Lengkap</label>
+                                <input type="text" name="nama" class="form-control" placeholder="Masukkan nama lengkap sesuai identitas" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary fw-semibold small">Program Studi / Jurusan</label>
+                                <input type="text" name="jurusan" class="form-control" placeholder="Contoh: Teknik Informatika" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-secondary fw-semibold small">Periode Semester</label>
+                                <input type="number" name="semester" class="form-control" min="1" max="14" placeholder="1-14" required>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label text-secondary fw-semibold small">Nilai IPK</label>
+                                <input type="text" name="ipk" class="form-control" placeholder="Contoh: 3.75" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary fw-semibold small">Alamat Surat Elektronik (Email)</label>
+                                <input type="email" name="email" class="form-control" placeholder="nama@domain.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary fw-semibold small">Nomor Kontak / WhatsApp</label>
+                                <input type="text" name="no_hp" class="form-control" placeholder="Contoh: 0812345678" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-secondary fw-semibold small">Status Akademik</label>
+                                <select name="status" class="form-select" required>
+                                    <option value="Aktif" selected>Aktif</option>
+                                    <option value="Cuti">Cuti</option>
+                                    <option value="Non-Aktif">Non-Aktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light border-0 p-3">
+                        <button type="button" class="btn btn-light btn-custom text-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary btn-custom bg-navy px-4"><i class="fas fa-save me-2"></i>Simpan Rekam Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if mahasiswas %}
+        {% for mhs in mahasiswas %}
+        <div class="modal fade" id="modalEditData{{ mhs.nim }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalEditLabel{{ mhs.nim }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content modal-content-custom">
+                    <div class="modal-header d-flex modal-header-custom bg-light">
+                        <h5 class="modal-title fw-bold text-dark" id="modalEditLabel{{ mhs.nim }}"><i class="fas fa-user-edit me-2 text-warning"></i>Formulir Pembaruan Parameter Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/dashboard/mahasiswa/edit/{{ mhs.nim }}" method="POST" autocomplete="off">
+                        <div class="modal-body p-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label text-secondary fw-semibold small">NIM Identitas (Kunci Utama - Terkunci)</label>
+                                    <input type="text" class="form-control input-readonly" value="{{ mhs.nim }}" readonly tabindex="-1">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-secondary fw-semibold small">Nama Lengkap</label>
+                                    <input type="text" name="nama" class="form-control" value="{{ mhs.get_nama() }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-secondary fw-semibold small">Program Studi / Jurusan</label>
+                                    <input type="text" name="jurusan" class="form-control" value="{{ mhs.jurusan }}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-secondary fw-semibold small">Periode Semester</label>
+                                    <input type="number" name="semester" class="form-control" min="1" max="14" value="{{ mhs.semester }}" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label text-secondary fw-semibold small">Nilai IPK</label>
+                                    <input type="text" name="ipk" class="form-control" value="{{ mhs.ipk }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-secondary fw-semibold small">Alamat Surat Elektronik (Email)</label>
+                                    <input type="email" name="email" class="form-control" value="{{ mhs.email }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-secondary fw-semibold small">Nomor Kontak / WhatsApp</label>
+                                    <input type="text" name="no_hp" class="form-control" value="{{ mhs.no_hp }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label text-secondary fw-semibold small">Status Akademik</label>
+                                    <select name="status" class="form-select" required>
+                                        <option value="Aktif" {{ 'selected' if mhs.status.lower() == 'aktif' else '' }}>Aktif</option>
+                                        <option value="Cuti" {{ 'selected' if mhs.status.lower() == 'cuti' else '' }}>Cuti</option>
+                                        <option value="Non-Aktif" {{ 'selected' if mhs.status.lower() == 'non-aktif' else '' }}>Non-Aktif</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer bg-light border-0 p-3">
+                            <button type="button" class="btn btn-light btn-custom text-secondary" data-bs-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-warning btn-custom px-4"><i class="fas fa-save me-2"></i>Terapkan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='sb-admin/js/scripts.js') }}"></script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const flashItems = document.querySelectorAll('.flash-item');
+            
+            flashItems.forEach(function(item) {
+                let iconType = item.getAttribute('data-category');
+                const message = item.getAttribute('data-message');
+                
+                if (iconType === "danger") {
+                    iconType = "error";
+                } else if (iconType === "success") {
+                    iconType = "success";
+                } else {
+                    iconType = "info";
+                }
+                
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: iconType,
+                    title: message,
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer)
+                        toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                });
+            });
+        });
+
+        function hapusKonfirmasi(nim, nama) {
+            Swal.fire({
+                title: 'Hapus Permanen?',
+                text: `Apakah Anda yakin ingin menghapus data ${nama} (NIM: ${nim})? Tindakan ini tidak dapat dibatalkan.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                customClass: { popup: 'modal-content-custom' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.replace(`/dashboard/mahasiswa/hapus/${nim}`);
+                }
+            });
+        }
+
+        document.getElementById('btn-logout').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            Swal.fire({
+                title: 'Konfirmasi Keluar',
+                text: "Apakah Anda yakin ingin mengakhiri sesi administrasi ini?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#0f2c59',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batalkan',
+                background: '#ffffff',
+                customClass: { popup: 'modal-content-custom' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Menutup Sesi...',
+                        text: 'Sedang membersihkan data autentikasi aman Anda.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                            setTimeout(() => {
+                                window.location.href = "/logout";
+                            }, 1200);
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Informasi Manajemen Data Mahasiswa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Warna Navy Premium Custom */
+        .bg-navy { background-color: #0f2c59; }
+        .text-navy { color: #0f2c59; }
+        .btn-navy { background-color: #0f2c59; color: white; }
+        .btn-navy:hover { background-color: #1d4480; color: white; }
+        
+        /* Hero Section dengan transisi warna yang halus */
+        .hero-section {
+            background: linear-gradient(rgba(15, 44, 89, 0.95), rgba(15, 44, 89, 0.85)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200') no-repeat center center;
+            background-size: cover;
+            color: white;
+            padding: 120px 0;
+        }
+        
+        /* Card & Efek visual buatan sendiri yang rapi */
+        .card-feature {
+            border: none;
+            border-radius: 12px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+        }
+        
+        .stat-card {
+            margin-top: -50px;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-navy shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+                <i class="bi bi-mortarboard-fill me-2 fs-3 text-warning"></i>
+                <div>
+                    <span class="d-block fs-5 lh-1 tracking-wide">SIM MAHASISWA</span>
+                    <small class="fs-6 fw-normal text-white-50" style="font-size: 0.75rem;">Sistem Informasi Manajemen Mahasiswa</small>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <li class="nav-item"><a class="nav-link active" href="/">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#alur">Alur Manajemen Data</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#fitur">Fitur Sistem</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning fw-medium" href="/dashboard">
+                            <i class="bi bi-speedometer2 me-1"></i> Dashboard Kelola
+                        </a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-warning btn-sm px-4 fw-bold text-navy shadow-sm" href="/login">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> AUTENTIKASI ADMIN
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section text-center text-lg-start">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-5 fw-bold mb-3">Sistem Informasi Manajemen Data Mahasiswa Terintegrasi</h1>
+                    <p class="lead mb-4 opacity-90">Platform digital khusus untuk mempermudah administrasi akademik. Membantu Administrator dalam memproses verifikasi identitas, melakukan analisis sorting nilai IPK secara manual, serta manajemen rekam data mahasiswa secara berkala.</p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+                        <a href="/login" class="btn btn-warning btn-lg px-4 fw-bold text-navy shadow"><i class="bi bi-lock-fill me-2"></i>Login Admin Sistem</a>
+                        <a href="#fitur" class="btn btn-outline-light btn-lg px-4"><i class="bi bi-arrow-down-circle me-2"></i>Eksplorasi Fitur</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="container stat-card">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow border-0 rounded-4 bg-white p-4">
+                    <div class="row text-center g-3">
+                        <div class="col-sm-4 border-end border-light-subtle">
+                            <h3 class="fw-bold text-navy mb-0"><i class="bi bi-person-check text-success me-1"></i> Data Valid</h3>
+                            <small class="text-muted">Manajemen Status Mahasiswa</small>
+                        </div>
+                        <div class="col-sm-4 border-end border-light-subtle">
+                            <h3 class="fw-bold text-navy mb-0"><i class="bi bi-hdd-network text-primary me-1"></i> Basis Data MySQL</h3>
+                            <small class="text-muted">Penyimpanan Transparan & Aman</small>
+                        </div>
+                        <div class="col-sm-4">
+                            <h3 class="fw-bold text-navy mb-0"><i class="bi bi-lightning-charge text-warning me-1"></i> Responsif</h3>
+                            <small class="text-muted">Dukungan Python Flask Engine</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container my-5 py-5 border-bottom" id="alur">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-navy">Alur Kerja Manajemen Data Mahasiswa</h2>
+            <p class="text-muted">Prosedur standar tata kelola informasi mahasiswa di dalam sistem aplikasi</p>
+        </div>
+
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-3 shadow-sm border h-100">
+                    <div class="fs-1 text-warning mb-2 fw-bold">1</div>
+                    <h5 class="fw-bold text-navy">Autentikasi Administrator</h5>
+                    <p class="text-muted small mb-0">Masuk ke sistem operasional menggunakan akun Administrator resmi melalui gerbang login yang terenkripsi aman.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-3 shadow-sm border h-100">
+                    <div class="fs-1 text-warning mb-2 fw-bold">2</div>
+                    <h5 class="fw-bold text-navy">Validasi Sesi Akses</h5>
+                    <p class="text-muted small mb-0">Aplikasi Flask mencocokkan kredensial. Jika data autentikasi cocok, hak akses penuh ke dashboard pengelolaan mahasiswa akan diberikan.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-4 bg-white rounded-3 shadow-sm border h-100">
+                    <div class="fs-1 text-warning mb-2 fw-bold">3</div>
+                    <h5 class="fw-bold text-navy">Operasi Data Akademik (CRUD)</h5>
+                    <p class="text-muted small mb-0">Administrator dapat memproses penambahan, pembaruan, penghapusan, pencarian, serta analisis kalkulasi urutan prestasi mahasiswa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="container my-5 py-3" id="fitur">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-navy">Fitur Utama Sistem Manajemen</h2>
+            <p class="text-muted">Modul fundamental penunjang efektivitas administrasi pengolahan data mahasiswa</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-3 card-feature">
+                    <div class="card-body p-4 text-center">
+                        <div class="p-3 bg-primary-subtle text-primary rounded-circle d-inline-block mb-3">
+                            <i class="bi bi-person-vcard fs-3"></i>
+                        </div>
+                        <h5 class="card-title fw-bold text-navy">Master Biodata Mahasiswa</h5>
+                        <p class="card-text text-muted small">Menyimpan arsip profil pokok mahasiswa secara tervalidasi mulai dari Nomor Induk Mahasiswa (NIM), program studi, nomor kontak aktif, hingga alamat surat elektronik.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-3 card-feature">
+                    <div class="card-body p-4 text-center">
+                        <div class="p-3 bg-success-subtle text-success rounded-circle d-inline-block mb-3">
+                            <i class="bi bi-graph-up-arrow fs-3"></i>
+                        </div>
+                        <h5 class="card-title fw-bold text-navy">Analisis Urutan Prestasi (IPK)</h5>
+                        <p class="card-text text-muted small">Fungsi algoritma internal untuk menyortir pencapaian akademik Indeks Prestasi Kumulatif (IPK) secara riil dibarengi visualisasi kalkulasi running time.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm rounded-3 card-feature">
+                    <div class="card-body p-4 text-center">
+                        <div class="p-3 bg-warning-subtle text-warning rounded-circle d-inline-block mb-3">
+                            <i class="bi bi-shield-check fs-3"></i>
+                        </div>
+                        <h5 class="card-title fw-bold text-navy">Proteksi Sesi Informasi</h5>
+                        <p class="card-text text-muted small">Pengamanan ketat hak akses berkas dashboard yang membatasi manipulasi data dari pihak luar demi menjaga sterilitas arsip mahasiswa.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-navy text-white-50 text-center py-4 border-top border-secondary mt-auto">
+        <div class="container">
+            <p class="small mb-1">&copy; 2026 Sistem Informasi Manajemen Data Mahasiswa - Ditenagai oleh Python Flask.</p>
+            <small class="opacity-75">Sistem Pengelolaan Informasi Akademik dan Mahasiswa Internal Kampus.</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
