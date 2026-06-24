@@ -295,7 +295,7 @@ def backup_data_ke_file():
         # Generate teks backup langsung ke memori server
         output = []
         output.append("==================================================\n")
-        output.append("           BACKUP DATA MAHASISWA SYSTEM           \n")
+        output.append("            BACKUP DATA MAHASISWA SYSTEM           \n")
         output.append("==================================================\n")
         output.append("NIM          | NAMA               | JURUSAN        | IPK  \n")
         output.append("--------------------------------------------------\n")
@@ -349,9 +349,8 @@ def init_db():
     except Exception as e:
         print(f" -> [Sistem Warning] Gagal memeriksa tabel: {e}")
 
-# Inisialisasi dijalankan saat file dipanggil oleh cloud server
+# Inisialisasi database dijalankan secara global agar terpicu di Vercel
 init_db()
 
-if __name__ == '__main__':
-    # Saat berjalan di laptop (Lokal), debug tetap menyala dan port di 8000
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8000)), debug=True)
+# WAJIB UNTUK VERCEL HOSTING: Mengekspos objek wsgi Flask ke serverless environment
+app = app
